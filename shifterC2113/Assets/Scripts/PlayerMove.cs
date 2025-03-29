@@ -14,6 +14,9 @@ public class PlayerMove : MonoBehaviour
 
     public Rigidbody _rb;
 
+    private float _currentSpeed;
+    private Vector3 _previosPosition;
+
     private void Update()
     {
         _movement.x = Input.GetAxis("Horizontal") * _shaffleSpeed;
@@ -30,6 +33,18 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _currentSpeed = (transform.position - _previosPosition).magnitude / Time.fixedDeltaTime;
+
+        _previosPosition = transform.position;
+
+        if(transform.position.z > 0)
+        {
+            if (_currentSpeed < 1 || _currentSpeed > 25)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+
         _movement.z = _speed;
         _rb.MovePosition(transform.position + _movement * Time.fixedDeltaTime);
 
